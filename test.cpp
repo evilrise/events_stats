@@ -5,6 +5,7 @@ int main()
 {
     int span_length = 3;
     EventsStats history;
+    history.StartRecord();
     for (int i = 0; i < 5; ++i)
     {
         history.AddEvent("BW", "A", EventType::RPC, 1);

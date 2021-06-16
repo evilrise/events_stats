@@ -107,13 +107,17 @@ class EventsStats
 {
 private:
     std::map<Event, EventStats> events_stats_;
+    bool is_recording_;
 
 public:
-    EventsStats() : events_stats_() {}
+    EventsStats() : events_stats_(), is_recording_(false) {}
 
 public:
     void AddEvent(std::string mod, std::string event, enum EventType event_tp, EventSize size)
     {
+        if (!is_recording_)
+            return;
+
         Event event_key(mod, event, event_tp);
         auto it = events_stats_.find(event_key);
         if (it == events_stats_.end())
@@ -123,6 +127,17 @@ public:
         }
 
         it->second.AddEvent(GetTimeStamp(), size);
+    }
+
+    void StartRecord()
+    {
+        events_stats_.clear();
+        is_recording_ = true;
+    }
+
+    void StopRecord()
+    {
+        is_recording_ = false;
     }
 
     const std::map<Event, EventStats>& GetEventsStats()
